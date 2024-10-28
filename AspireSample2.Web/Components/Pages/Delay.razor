@@ -1,0 +1,32 @@
+﻿@page "/delay"
+@rendermode InteractiveServer
+
+@inject ApiClient DelayApi
+
+<PageTitle>Delay</PageTitle>
+
+<h1>Delay</h1>
+
+<div>@_delay</div>
+
+<div class="btn-group">
+    @foreach (int val in (int[])[30, 100, 500, 1000, 5000, 10_000, 20_000, 30_000])
+    {
+        <button class="btn btn-primary" @onclick="() => UpdateDelay(val)">@val</button>
+    }
+</div>
+
+@code {
+    private int _delay;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _delay = await DelayApi.GetDelayAsync();
+    }
+
+    protected async Task UpdateDelay(int value)
+    {
+        await DelayApi.SetDelayAsync(value);
+        _delay = value;
+    }
+}
